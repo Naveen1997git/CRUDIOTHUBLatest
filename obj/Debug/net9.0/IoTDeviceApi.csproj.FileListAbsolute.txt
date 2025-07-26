@@ -59,3 +59,10 @@ C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\obj\Debug\net9.0\refint\
 C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\obj\Debug\net9.0\IoTDeviceApi.pdb
 C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\obj\Debug\net9.0\IoTDeviceApi.genruntimeconfig.cache
 C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\obj\Debug\net9.0\ref\IoTDeviceApi.dll
+C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\obj\Debug\net9.0\IoTDeviceApi.sourcelink.json
+C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\bin\Debug\net9.0\publish\web.config
+C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\bin\Debug\net9.0\publish\appsettings.Development.json
+C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\bin\Debug\net9.0\publish\appsettings.json
+C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\bin\Debug\net9.0\publish\IoTDeviceApi.deps.json
+C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\bin\Debug\net9.0\publish\IoTDeviceApi.runtimeconfig.json
+C:\Users\10762925\source\repos\AzureIOTHUb\IoTDeviceApi\bin\Debug\net9.0\publish\IoTDeviceApi.staticwebassets.endpoints.json

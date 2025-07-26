@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "enz08vk8ilo=",
+  "dgSpecHash": "l/YVJJbt1pg=",
   "success": true,
-  "projectFilePath": "C:\\Users\\10762925\\source\\repos\\AzureIOTHUb\\IoTDeviceApi\\IoTDeviceApi.csproj",
+  "projectFilePath": "C:\\Users\\10762925\\source\\repos\\AzureIOTHUBLatest\\IoTDeviceApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\10762925\\.nuget\\packages\\azure.core\\1.44.1\\azure.core.1.44.1.nupkg.sha512",
     "C:\\Users\\10762925\\.nuget\\packages\\azure.data.tables\\12.11.0\\azure.data.tables.12.11.0.nupkg.sha512",
