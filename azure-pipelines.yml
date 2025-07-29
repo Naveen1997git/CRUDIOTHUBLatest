@@ -42,15 +42,22 @@ steps:
       /p:SkipInvalidConfigurations=true
       /p:DesktopBuildPackageLocation=$(Build.ArtifactStagingDirectory)\WebApp.zip
       /p:DeployIisAppPath="Default Web Site"
-      /p:PublishDir=$(Build.SourcesDirectory)\publish\
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# Run unit tests
-- task: VSTest@2
+# ✅ Copy actual publish output to publish folder
+- task: CopyFiles@2
+  displayName: 'Copy published files to publish folder'
   inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+    SourceFolder: '$(Build.SourcesDirectory)\obj\Release\net9.0\PubTmp\Out'
+    Contents: '**'
+    TargetFolder: '$(Build.SourcesDirectory)\publish'
+
+# ✅ Optional: Verify contents of publish folder
+- powershell: |
+    Write-Host "Listing contents of publish folder:"
+    Get-ChildItem -Path "$(Build.SourcesDirectory)\publish" -Recurse
+  displayName: 'Verify publish folder contents'
 
 # Publish build artifacts
 - task: PublishBuildArtifacts@1
@@ -67,12 +74,6 @@ steps:
     appType: 'webApp'
     WebAppName: '$(appName)'
     packageForLinux: '$(packagePath)'
-
-# ✅ Optional: Verify contents of publish folder
-- powershell: |
-    Write-Host "Listing contents of publish folder:"
-    Get-ChildItem -Path "$(Build.SourcesDirectory)\publish" -Recurse
-  displayName: 'Verify publish folder contents'
 
 # ✅ Docker build and push with corrected context
 - task: Docker@2
