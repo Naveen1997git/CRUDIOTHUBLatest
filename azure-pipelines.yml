@@ -18,17 +18,20 @@ variables:
   acrName: 'myiotacr'
   appName: 'myiotapp'
   imageName: 'myiotapp'
-  packagePath: '$(build.artifactStagingDirectory)/WebApp.zip'
+  packagePath: '$(Build.ArtifactStagingDirectory)/WebApp.zip'
   aksResourceGroup: 'iotthubcrud'
   aksClusterName: 'myiot-aks'
 
 steps:
+# Install NuGet
 - task: NuGetToolInstaller@1
 
+# Restore NuGet packages
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
 
+# Build and publish the ASP.NET app
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -43,17 +46,20 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# Run unit tests
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# Publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(build.artifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
+# Deploy to Azure App Service
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
@@ -62,9 +68,10 @@ steps:
     WebAppName: '$(appName)'
     packageForLinux: '$(packagePath)'
 
+# Build and Push Docker Image to ACR
 - task: Docker@2
   inputs:
-    containerRegistry: 'ACRConnection-MyIotApp-New'
+    containerRegistry: '$(acrServiceConnection)'
     repository: '$(imageName)'
     command: 'buildAndPush'
     Dockerfile: 'Dockerfile'
@@ -72,6 +79,7 @@ steps:
     tags: |
       latest
 
+# Deploy to AKS
 - task: Kubernetes@1
   inputs:
     connectionType: 'Azure Resource Manager'
