@@ -67,6 +67,12 @@ steps:
     WebAppName: '$(appName)'
     packageForLinux: '$(packagePath)'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    projects: '**/*.csproj'
+    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/publish'
+
 # ✅ Build and Push Docker Image to ACR
 
 - task: Docker@2
