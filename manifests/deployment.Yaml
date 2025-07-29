@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myiotapp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myiotapp
+  template:
+    metadata:
+      labels:
+        app: myiotapp
+    spec:
+      containers:
+      - name: myiotapp
+        image: myiotacr.azurecr.io/myiotapp:latest
+        ports:
+        - containerPort: 80
