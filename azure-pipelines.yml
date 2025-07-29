@@ -14,7 +14,7 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
   azureSubscription: 'AzureConnection-MyIotApp'         # AKS service connection name
-  acrServiceConnection: 'ACRConnection-MylotApp'         # ACR service connection name
+  acrServiceConnection: 'ACRConnection-MyIotApp-New'         # ACR service connection name
   acrName: 'myiotacr'
   appName: 'myiotapp'                                    # ACR name from Azure portal
   imageName: 'myiotapp'                                  # Docker image name
@@ -65,7 +65,7 @@ steps:
 
 - task: Docker@2
   inputs:
-    containerRegistry: 'ACRConnection-MylotApp'
+    containerRegistry: 'ACRConnection-MyIotApp-New'
     repository: 'myiotapp'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
