@@ -62,10 +62,11 @@ steps:
     packageForLinux: '$(packagePath)'
 
 # ✅ Build and Push Docker Image to ACR
+
 - task: Docker@2
   inputs:
-    containerRegistry: '$(acrServiceConnection)'
-    repository: '$(imageName)'
+    containerRegistry: 'ACRConnection-MylotApp'
+    repository: 'myiotapp'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
     tags: |
