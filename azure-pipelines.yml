@@ -81,4 +81,3 @@ steps:
     command: apply
     useConfigurationFile: true
     configuration: 'manifests/deployment.yaml'
-
