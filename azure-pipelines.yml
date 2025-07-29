@@ -13,14 +13,20 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  azureSubscription: 'AzureConnection-MyIotApp'  # Your service connection name
+  appName: 'myiotapp'  # Your Azure App Service name
+  packagePath: '$(build.artifactStagingDirectory)/WebApp.zip'
 
 steps:
+# Install NuGet
 - task: NuGetToolInstaller@1
 
+# Restore NuGet packages
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
 
+# Build the solution and create deployment package
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
@@ -28,14 +34,23 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# Run unit tests
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# ✅ Publish the build artifact
+# Publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(build.artifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+# ✅ Deploy to Azure App Service
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: '$(azureSubscription)'
+    appType: 'webApp'
+    appName: '$(appName)'
+    package: '$(packagePath)'
