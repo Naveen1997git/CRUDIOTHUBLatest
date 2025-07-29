@@ -2,6 +2,7 @@
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
 trigger:
 - dev
 
@@ -41,7 +42,7 @@ steps:
       /p:SkipInvalidConfigurations=true
       /p:DesktopBuildPackageLocation=$(Build.ArtifactStagingDirectory)\WebApp.zip
       /p:DeployIisAppPath="Default Web Site"
-      /p:PublishDir=$(Build.ArtifactStagingDirectory)\publish\
+      /p:PublishDir=$(Build.SourcesDirectory)\publish\
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
@@ -67,14 +68,20 @@ steps:
     WebAppName: '$(appName)'
     packageForLinux: '$(packagePath)'
 
-# ✅ FIX: Docker build context now correctly points to the publish folder
+# ✅ Optional: Verify contents of publish folder
+- powershell: |
+    Write-Host "Listing contents of publish folder:"
+    Get-ChildItem -Path "$(Build.SourcesDirectory)\publish" -Recurse
+  displayName: 'Verify publish folder contents'
+
+# ✅ Docker build and push with corrected context
 - task: Docker@2
   inputs:
     containerRegistry: '$(acrServiceConnection)'
     repository: '$(imageName)'
     command: 'buildAndPush'
     Dockerfile: 'Dockerfile'
-    buildContext: '$(Build.ArtifactStagingDirectory)\publish'
+    buildContext: '$(Build.SourcesDirectory)\publish'
     tags: |
       latest
 
@@ -89,9 +96,3 @@ steps:
     command: apply
     useConfigurationFile: true
     configuration: 'manifests/deployment.yaml'
-
-
-  
-
-
-    
