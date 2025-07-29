@@ -13,52 +13,47 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  azureSubscription: 'AzureConnection-MyIotApp'         # AKS service connection name
-  acrServiceConnection: 'ACRConnection-MyIotApp-New'         # ACR service connection name
+  azureSubscription: 'AzureConnection-MyIotApp'
+  acrServiceConnection: 'ACRConnection-MyIotApp-New'
   acrName: 'myiotacr'
-  appName: 'myiotapp'                                    # ACR name from Azure portal
-  imageName: 'myiotapp'                                  # Docker image name
+  appName: 'myiotapp'
+  imageName: 'myiotapp'
   packagePath: '$(build.artifactStagingDirectory)/WebApp.zip'
-  aksResourceGroup: 'iotthubcrud'                        # AKS resource group
-  aksClusterName: 'myiot-aks'                            # AKS cluster name
+  aksResourceGroup: 'iotthubcrud'
+  aksClusterName: 'myiot-aks'
 
 steps:
-# Install NuGet
 - task: NuGetToolInstaller@1
 
-# Restore NuGet packages
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
 
-# Build the solution and create deployment package
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
     msbuildArgs: >
-      /p:DeployOnBuild=true 
-      /p:WebPublishMethod=Package 
-      /p:PackageAsSingleFile=true 
-      /p:SkipInvalidConfigurations=true 
-      /p:DesktopBuildPackageLocation=$(build.artifactStagingDirectory)\WebApp.zip 
+      /p:DeployOnBuild=true
+      /p:WebPublishMethod=Package
+      /p:PackageAsSingleFile=true
+      /p:SkipInvalidConfigurations=true
+      /p:DesktopBuildPackageLocation=$(build.artifactStagingDirectory)\WebApp.zip
       /p:DeployIisAppPath="Default Web Site"
+      /p:PublishDir=$(Build.ArtifactStagingDirectory)\publish\
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# Run unit tests
 - task: VSTest@2
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# Publish build artifacts
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(build.artifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-# ✅ Deploy to Azure App Service
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
@@ -67,24 +62,16 @@ steps:
     WebAppName: '$(appName)'
     packageForLinux: '$(packagePath)'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    projects: '**/*.csproj'
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)/publish'
-
-# ✅ Build and Push Docker Image to ACR
-
 - task: Docker@2
   inputs:
     containerRegistry: 'ACRConnection-MyIotApp-New'
-    repository: 'myiotapp'
+    repository: '$(imageName)'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+    Dockerfile: 'Dockerfile'
+    buildContext: '$(Build.ArtifactStagingDirectory)/publish'
     tags: |
       latest
 
-# ✅ Deploy to AKS
 - task: Kubernetes@1
   inputs:
     connectionType: 'Azure Resource Manager'
