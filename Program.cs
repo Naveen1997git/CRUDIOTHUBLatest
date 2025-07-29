@@ -24,12 +24,12 @@ builder.Services.AddSingleton(new ShareServiceClient(builder.Configuration["Azur
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "IoTDeviceApi v1"));
 }
-
 
 app.UseAuthorization();
 app.MapControllers();
