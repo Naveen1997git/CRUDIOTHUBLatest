@@ -13,7 +13,7 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  azureSubscription: 'AzureConnection-MyIotApp'  # Your service connection name
+  azureSubscription: 'AzureConnection-MyIotApp'  # Your Azure DevOps service connection name
   appName: 'myiotapp'  # Your Azure App Service name
   packagePath: '$(build.artifactStagingDirectory)/WebApp.zip'
 
@@ -47,10 +47,11 @@ steps:
     ArtifactName: 'drop'
     publishLocation: 'Container'
 
-# ✅ Deploy to Azure App Service
-- task: AzureWebApp@1
+# ✅ Deploy to Azure App Service using AzureRmWebAppDeployment
+- task: AzureRmWebAppDeployment@4
   inputs:
+    ConnectionType: 'AzureRM'
     azureSubscription: '$(azureSubscription)'
     appType: 'webApp'
-    appName: '$(appName)'
-    package: '$(packagePath)'
+    WebAppName: '$(appName)'
+    packageForLinux: '$(packagePath)'  # Works for Windows App Service too
