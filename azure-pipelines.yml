@@ -15,7 +15,8 @@ variables:
   buildConfiguration: 'Release'
   azureSubscription: 'AzureConnection-MyIotApp'         # AKS service connection name
   acrServiceConnection: 'ACRConnection-MylotApp'         # ACR service connection name
-  acrName: 'myiotacr'                                    # ACR name from Azure portal
+  acrName: 'myiotacr'
+  appName: 'myiotapp'                                    # ACR name from Azure portal
   imageName: 'myiotapp'                                  # Docker image name
   packagePath: '$(build.artifactStagingDirectory)/WebApp.zip'
   aksResourceGroup: 'iotthubcrud'                        # AKS resource group
