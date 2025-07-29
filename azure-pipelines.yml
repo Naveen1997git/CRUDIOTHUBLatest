@@ -90,10 +90,11 @@ steps:
 - task: Kubernetes@1
   inputs:
     connectionType: 'Azure Resource Manager'
-    azureSubscription: '$(azureSubscription)'
+    azureSubscriptionEndpoint: '$(azureSubscription)'  # ✅ This line is required
     azureResourceGroup: '$(aksResourceGroup)'
     kubernetesCluster: '$(aksClusterName)'
     namespace: 'default'
     command: apply
     useConfigurationFile: true
     configuration: 'manifests/deployment.yaml'
+
